@@ -1,6 +1,6 @@
 # HAI-DEF Drug Discovery Pipeline
 
-> **A comprehensive drug discovery pipeline powered by Google's Health AI Developer Foundations (HAI-DEF) — TxGemma, MedGemma, and related models.**
+> **A comprehensive drug discovery pipeline powered by Google's Health AI Developer Foundations (HAI-DEF) — TxGemma, MedGemma, and Path Foundation.**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -17,6 +17,7 @@ This pipeline demonstrates **end-to-end drug discovery** using Google's open-wei
 | 🔬 Binding Affinity | TxGemma-Predict | Drug-target interaction scoring |
 | ⚗️ ADMET Profiling | TxGemma-Predict | Absorption, Distribution, Metabolism, Excretion, Toxicity |
 | 🧪 Clinical Viability | TxGemma-Chat | Conversational reasoning about drug candidates |
+| 🔬 Pathology Analysis | Path Foundation | Histopathology embeddings & treatment response |
 | 📊 Medical Literature | MedGemma | Evidence synthesis from medical text |
 
 ## Architecture
@@ -37,8 +38,12 @@ This pipeline demonstrates **end-to-end drug discovery** using Google's open-wei
 │              │  MedGemma    │                            │
 │              │  (Medical)   │                            │
 │              └──────────────┘                            │
+│              ┌──────────────────┐                        │
+│              │ Path Foundation  │                        │
+│              │ (Histopathology) │                        │
+│              └──────────────────┘                        │
 ├─────────────────────────────────────────────────────────┤
-│  Data: SMILES • Protein Sequences • Disease Ontologies   │
+│  Data: SMILES • Protein Sequences • H&E Tissue Patches  │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -70,6 +75,7 @@ python -m pipeline.target_identification
 python -m pipeline.lead_discovery
 python -m pipeline.admet_profiling
 python -m pipeline.clinical_reasoning
+python -m pipeline.pathology_analysis
 ```
 
 ### 4. Run as Notebook
@@ -92,6 +98,7 @@ hai-def-drug-discovery/
 │   ├── binding_affinity.py        # Stage 3: Drug-target interaction
 │   ├── admet_profiling.py         # Stage 4: ADMET property prediction
 │   ├── clinical_reasoning.py      # Stage 5: TxGemma-Chat analysis
+│   ├── pathology_analysis.py      # Stage 6: Path Foundation histopathology
 │   └── visualization.py           # Charts, molecular visualization
 ├── data/
 │   └── sample_compounds.csv       # Example drug candidates (SMILES)
@@ -129,6 +136,7 @@ Disease: Non-Small Cell Lung Cancer (NSCLC)
 | TxGemma Predict (9B) | `google/txgemma-9b-predict` | 9B | Detailed predictions |
 | TxGemma Chat (27B) | `google/txgemma-27b-chat` | 27B | Scientific reasoning |
 | MedGemma 4B | `google/medgemma-4b-it` | 4B | Medical context |
+| Path Foundation | `google/path-foundation` | ViT-S | Histopathology embeddings |
 
 ## Disclaimer
 

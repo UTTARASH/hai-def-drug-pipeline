@@ -25,6 +25,7 @@ from .binding_affinity import batch_binding_prediction, print_binding_results
 from .admet_profiling import batch_admet_profiling, print_batch_summary, print_admet_profile
 from .clinical_reasoning import assess_clinical_viability, print_clinical_assessment
 from .visualization import print_final_report, create_pipeline_summary_chart
+from .pathology_analysis import run_pathology_analysis, print_pathology_results
 
 logging.basicConfig(
     level=logging.INFO,
@@ -40,7 +41,7 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
     print("\n")
     print("╔" + "═" * 60 + "╗")
     print("║" + "  HAI-DEF Drug Discovery Pipeline".center(60) + "║")
-    print("║" + "  Powered by TxGemma + MedGemma".center(60) + "║")
+    print("║" + "  TxGemma + MedGemma + Path Foundation".center(60) + "║")
     print("╚" + "═" * 60 + "╝")
     print(f"\n  Disease: {disease}")
     print(f"  Target:  {target}")
@@ -128,6 +129,19 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         )
         clinical_assessments.append(assessment)
         print_clinical_assessment(assessment)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 6: Pathology Analysis (Path Foundation)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🔬 Stage 6: Pathology Analysis (Path Foundation)")
+    print("━" * 60)
+    pathology_results = run_pathology_analysis(
+        image_dir="data/pathology",
+        drug_name=compounds[0]["name"] if compounds else "Unknown",
+        target_name=target,
+    )
+    print_pathology_results(pathology_results)
 
     # ──────────────────────────────────────────────────────────
     # Final Report
