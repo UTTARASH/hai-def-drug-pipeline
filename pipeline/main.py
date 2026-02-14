@@ -27,6 +27,8 @@ from .clinical_reasoning import assess_clinical_viability, print_clinical_assess
 from .visualization import print_final_report, create_pipeline_summary_chart
 from .pathology_analysis import run_pathology_analysis, print_pathology_results
 from .medical_imaging import run_medsiglip_analysis, print_medsiglip_results
+from .derm_analysis import run_derm_analysis, print_derm_results
+from .cxr_analysis import run_cxr_analysis, print_cxr_results
 
 logging.basicConfig(
     level=logging.INFO,
@@ -156,6 +158,31 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         disease=disease,
     )
     print_medsiglip_results(medsiglip_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 8: Dermatology Analysis (Derm Foundation)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🪨 Stage 8: Dermatology Analysis (Derm Foundation)")
+    print("━" * 60)
+    derm_results = run_derm_analysis(
+        drug_name=compounds[0]["name"] if compounds else "Unknown",
+        target_name=target,
+    )
+    print_derm_results(derm_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 9: Chest X-Ray Analysis (CXR Foundation)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🏥 Stage 9: Chest X-Ray Analysis (CXR Foundation)")
+    print("━" * 60)
+    cxr_results = run_cxr_analysis(
+        drug_name=compounds[0]["name"] if compounds else "Unknown",
+        target_name=target,
+        disease=disease,
+    )
+    print_cxr_results(cxr_results)
 
     # ──────────────────────────────────────────────────────────
     # Final Report
