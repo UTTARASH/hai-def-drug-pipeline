@@ -29,6 +29,8 @@ from .pathology_analysis import run_pathology_analysis, print_pathology_results
 from .medical_imaging import run_medsiglip_analysis, print_medsiglip_results
 from .derm_analysis import run_derm_analysis, print_derm_results
 from .cxr_analysis import run_cxr_analysis, print_cxr_results
+from .deepchem_analysis import run_deepchem_analysis, print_deepchem_results
+from .alphafold_analysis import run_alphafold_analysis, print_alphafold_results
 
 logging.basicConfig(
     level=logging.INFO,
@@ -183,6 +185,27 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         disease=disease,
     )
     print_cxr_results(cxr_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 10: Molecular Property Prediction (DeepChem)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  ⚗️ Stage 10: Molecular Properties (DeepChem GNN)")
+    print("━" * 60)
+    deepchem_results = run_deepchem_analysis(compounds=compounds)
+    print_deepchem_results(deepchem_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 11: Protein Structure Analysis (AlphaFold)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🧬 Stage 11: Protein Structure (AlphaFold)")
+    print("━" * 60)
+    alphafold_results = run_alphafold_analysis(
+        target_name=target,
+        disease=disease,
+    )
+    print_alphafold_results(alphafold_results)
 
     # ──────────────────────────────────────────────────────────
     # Final Report

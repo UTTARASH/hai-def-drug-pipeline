@@ -16,6 +16,8 @@ PATH_FOUNDATION = "google/path-foundation"
 MEDSIGLIP = "google/medsiglip"
 DERM_FOUNDATION = "google/derm-foundation"
 CXR_FOUNDATION = "google/cxr-foundation"
+DEEPCHEM_GCN = "deepchem/graphconv"
+ALPHAFOLD_DB = "alphafold-ebi/structure-db"
 
 # Default model for each pipeline stage
 DEFAULT_MODELS = {
@@ -29,6 +31,8 @@ DEFAULT_MODELS = {
     "medical_imaging": MEDSIGLIP,
     "derm_analysis": DERM_FOUNDATION,
     "cxr_analysis": CXR_FOUNDATION,
+    "deepchem_analysis": DEEPCHEM_GCN,
+    "alphafold_analysis": ALPHAFOLD_DB,
 }
 
 # ═══════════════════════════════════════════════════════════

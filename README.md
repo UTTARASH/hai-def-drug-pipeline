@@ -1,6 +1,6 @@
 # HAI-DEF Drug Discovery Pipeline
 
-> **A comprehensive drug discovery pipeline powered by Google's Health AI Developer Foundations (HAI-DEF) — TxGemma, MedGemma, Path Foundation, MedSigLIP, Derm Foundation, and CXR Foundation.**
+> **A comprehensive drug discovery pipeline powered by Google's Health AI Developer Foundations (HAI-DEF), DeepChem, and AlphaFold.**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -21,6 +21,8 @@ This pipeline demonstrates **end-to-end drug discovery** using Google's open-wei
 | 🏥 Medical Imaging | MedSigLIP | Zero-shot medical image classification & retrieval |
 | 🪨 Dermatology | Derm Foundation | Skin drug reaction monitoring & severity scoring |
 | 🏥 Chest X-Ray | CXR Foundation | Pulmonary drug effects & treatment response |
+| ⚗️ Molecular Properties | DeepChem GCN | GNN-based solubility, toxicity, QED scoring |
+| 🧬 Protein Structure | AlphaFold | 3D structure, binding pockets, druggability |
 | 📊 Medical Literature | MedGemma | Evidence synthesis from medical text |
 
 ## Architecture
@@ -105,6 +107,8 @@ hai-def-drug-discovery/
 │   ├── medical_imaging.py         # Stage 7: MedSigLIP zero-shot imaging
 │   ├── derm_analysis.py           # Stage 8: Derm Foundation skin analysis
 │   ├── cxr_analysis.py            # Stage 9: CXR Foundation chest X-ray
+│   ├── deepchem_analysis.py       # Stage 10: DeepChem GNN properties
+│   ├── alphafold_analysis.py      # Stage 11: AlphaFold structure
 │   └── visualization.py           # Charts, molecular visualization
 ├── data/
 │   └── sample_compounds.csv       # Example drug candidates (SMILES)
@@ -146,6 +150,8 @@ Disease: Non-Small Cell Lung Cancer (NSCLC)
 | MedSigLIP | `google/medsiglip` | 400M+400M | Zero-shot medical image classification |
 | Derm Foundation | `google/derm-foundation` | ResNet101x3 | Dermatology image embeddings |
 | CXR Foundation | `google/cxr-foundation` | EfficientNet-L2 | Chest X-ray ELIXR embeddings |
+| DeepChem | `deepchem/graphconv` | GCN | Molecular property prediction |
+| AlphaFold | AlphaFold DB API | AlphaFold 2/3 | Protein structure prediction |
 
 ## Disclaimer
 
