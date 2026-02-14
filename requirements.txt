@@ -13,3 +13,4 @@ tensorflow>=2.15.0   # Path Foundation model (ViT-S)
 Pillow>=10.0.0       # Image processing for pathology patches
 deepchem>=2.7.0      # Graph neural network molecular properties
 requests>=2.31.0     # AlphaFold DB API access
+gradio>=4.0.0        # Interactive web demo

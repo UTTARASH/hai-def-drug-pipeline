@@ -31,6 +31,8 @@ from .derm_analysis import run_derm_analysis, print_derm_results
 from .cxr_analysis import run_cxr_analysis, print_cxr_results
 from .deepchem_analysis import run_deepchem_analysis, print_deepchem_results
 from .alphafold_analysis import run_alphafold_analysis, print_alphafold_results
+from .cross_stage_intelligence import CrossStageIntelligence, print_cross_stage_report
+from .evaluation import PipelineEvaluator, print_evaluation
 
 logging.basicConfig(
     level=logging.INFO,
@@ -206,6 +208,39 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         disease=disease,
     )
     print_alphafold_results(alphafold_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Cross-Stage Intelligence
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🧠 Cross-Stage Intelligence")
+    print("━" * 60)
+    all_results = {
+        "compounds": compounds,
+        "binding": binding_results,
+        "admet": admet_profiles,
+        "clinical": clinical_assessments,
+        "pathology": pathology_results,
+        "imaging": medsiglip_results,
+        "derm": derm_results,
+        "cxr": cxr_results,
+        "deepchem": deepchem_results,
+        "alphafold": alphafold_results,
+    }
+    csi = CrossStageIntelligence()
+    rankings = csi.rank_compounds(all_results)
+    all_results["rankings"] = rankings
+    print_cross_stage_report(all_results, disease, target)
+
+    # ──────────────────────────────────────────────────────────
+    # Evaluation & Benchmarking
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  📊 Pipeline Evaluation")
+    print("━" * 60)
+    evaluator = PipelineEvaluator()
+    eval_results = evaluator.evaluate(rankings)
+    print_evaluation(eval_results)
 
     # ──────────────────────────────────────────────────────────
     # Final Report

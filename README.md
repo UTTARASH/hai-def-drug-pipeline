@@ -1,6 +1,6 @@
 # HAI-DEF Drug Discovery Pipeline
 
-> **A comprehensive drug discovery pipeline powered by Google's Health AI Developer Foundations (HAI-DEF), DeepChem, and AlphaFold.**
+> **End-to-end drug discovery pipeline using 10 AI models (HAI-DEF + DeepChem + AlphaFold) with Cross-Stage Intelligence and Gradio demo.**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -23,6 +23,8 @@ This pipeline demonstrates **end-to-end drug discovery** using Google's open-wei
 | 🏥 Chest X-Ray | CXR Foundation | Pulmonary drug effects & treatment response |
 | ⚗️ Molecular Properties | DeepChem GCN | GNN-based solubility, toxicity, QED scoring |
 | 🧬 Protein Structure | AlphaFold | 3D structure, binding pockets, druggability |
+| 🧠 Cross-Stage Intelligence | MCDA Engine | Multi-model compound ranking |
+| 📊 Evaluation | Concordance Benchmarks | FDA-validated pipeline scoring |
 | 📊 Medical Literature | MedGemma | Evidence synthesis from medical text |
 
 ## Architecture
