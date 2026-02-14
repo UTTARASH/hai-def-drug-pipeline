@@ -13,6 +13,7 @@ TXGEMMA_27B_PREDICT = "google/txgemma-27b-predict"
 TXGEMMA_27B_CHAT = "google/txgemma-27b-chat"
 MEDGEMMA_4B = "google/medgemma-4b-it"
 PATH_FOUNDATION = "google/path-foundation"
+MEDSIGLIP = "google/medsiglip"
 
 # Default model for each pipeline stage
 DEFAULT_MODELS = {
@@ -23,6 +24,7 @@ DEFAULT_MODELS = {
     "clinical_reasoning": TXGEMMA_27B_CHAT,
     "medical_literature": MEDGEMMA_4B,
     "pathology_analysis": PATH_FOUNDATION,
+    "medical_imaging": MEDSIGLIP,
 }
 
 # ═══════════════════════════════════════════════════════════

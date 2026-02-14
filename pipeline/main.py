@@ -26,6 +26,7 @@ from .admet_profiling import batch_admet_profiling, print_batch_summary, print_a
 from .clinical_reasoning import assess_clinical_viability, print_clinical_assessment
 from .visualization import print_final_report, create_pipeline_summary_chart
 from .pathology_analysis import run_pathology_analysis, print_pathology_results
+from .medical_imaging import run_medsiglip_analysis, print_medsiglip_results
 
 logging.basicConfig(
     level=logging.INFO,
@@ -142,6 +143,19 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         target_name=target,
     )
     print_pathology_results(pathology_results)
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 7: Medical Image Analysis (MedSigLIP)
+    # ──────────────────────────────────────────────────────────
+    print("━" * 60)
+    print("  🏥 Stage 7: Medical Image Analysis (MedSigLIP)")
+    print("━" * 60)
+    medsiglip_results = run_medsiglip_analysis(
+        drug_name=compounds[0]["name"] if compounds else "Unknown",
+        target_name=target,
+        disease=disease,
+    )
+    print_medsiglip_results(medsiglip_results)
 
     # ──────────────────────────────────────────────────────────
     # Final Report
