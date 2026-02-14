@@ -33,6 +33,7 @@ from .deepchem_analysis import run_deepchem_analysis, print_deepchem_results
 from .alphafold_analysis import run_alphafold_analysis, print_alphafold_results
 from .cross_stage_intelligence import CrossStageIntelligence, print_cross_stage_report
 from .evaluation import PipelineEvaluator, print_evaluation
+from .federated_learning import run_federated_pipeline, print_federated_results
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,7 +43,7 @@ logging.basicConfig(
 logger = logging.getLogger("hai-def-pipeline")
 
 
-def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGFR"):
+def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGFR", federated: bool = False):
     """Execute the full drug discovery pipeline."""
 
     print("\n")
@@ -56,6 +57,19 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
     print()
 
     start_time = time.time()
+    federated_results = None
+
+    # ──────────────────────────────────────────────────────────
+    # Stage 0 (Optional): Federated Learning
+    # ──────────────────────────────────────────────────────────
+    if federated:
+        print("━" * 60)
+        print("  🏥 Stage 0: Federated Learning (Multi-Hospital)")
+        print("━" * 60)
+        federated_results = run_federated_pipeline(
+            disease=disease, target=target,
+        )
+        print_federated_results(federated_results)
 
     # ──────────────────────────────────────────────────────────
     # Stage 1: Target Identification
@@ -226,6 +240,7 @@ def run_pipeline(disease: str = "Non-Small Cell Lung Cancer", target: str = "EGF
         "cxr": cxr_results,
         "deepchem": deepchem_results,
         "alphafold": alphafold_results,
+        "federated": federated_results,
     }
     csi = CrossStageIntelligence()
     rankings = csi.rank_compounds(all_results)
@@ -289,9 +304,13 @@ Examples:
         "--target", default="EGFR",
         help="Drug target gene symbol (default: EGFR)"
     )
+    parser.add_argument(
+        "--federated", action="store_true",
+        help="Enable federated learning across simulated hospital nodes"
+    )
 
     args = parser.parse_args()
-    run_pipeline(disease=args.disease, target=args.target)
+    run_pipeline(disease=args.disease, target=args.target, federated=args.federated)
 
 
 if __name__ == "__main__":

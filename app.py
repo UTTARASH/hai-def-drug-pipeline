@@ -37,11 +37,12 @@ from pipeline.cxr_analysis import run_cxr_analysis
 from pipeline.deepchem_analysis import run_deepchem_analysis
 from pipeline.alphafold_analysis import run_alphafold_analysis
 from pipeline.cross_stage_intelligence import CrossStageIntelligence
+from pipeline.federated_learning import run_federated_pipeline, FederatedDrugDiscovery
 
 
 # ─── Pipeline Runner ──────────────────────────────────────────────────
 
-def run_full_pipeline(disease: str, target: str, progress=gr.Progress()):
+def run_full_pipeline(disease: str, target: str, enable_federated: bool = False, progress=gr.Progress()):
     """Run the complete 11-stage pipeline with progress updates."""
 
     results = {}
@@ -49,6 +50,18 @@ def run_full_pipeline(disease: str, target: str, progress=gr.Progress()):
 
     def log(msg):
         log_lines.append(msg)
+
+    # Optional: Federated Learning
+    federated_output = "*Federated learning not enabled for this run.*"
+    if enable_federated:
+        progress(0.02, desc="Stage 0: Federated Learning")
+        log("🏥 Stage 0: Federated Learning (5 Hospital Nodes)")
+        fed_results = run_federated_pipeline(disease=disease, target=target)
+        federated_output = format_federated(fed_results)
+        results["federated"] = fed_results
+        log(f"   → {fed_results['num_hospitals']} hospitals, "
+            f"{fed_results['num_rounds']} rounds, "
+            f"{len(fed_results['consensus_biomarkers'])} consensus biomarkers")
 
     # Stage 1
     progress(0.05, desc="Stage 1: Target Identification")
@@ -145,7 +158,7 @@ def run_full_pipeline(disease: str, target: str, progress=gr.Progress()):
     safety_output = format_safety(results)
     structure_output = format_structures(alphafold)
 
-    return log_output, ranking_output, safety_output, structure_output, report
+    return log_output, ranking_output, safety_output, structure_output, report, federated_output
 
 
 def format_rankings(rankings: List[Dict]) -> str:
@@ -189,6 +202,46 @@ def format_structures(alphafold_results: List[Dict]) -> str:
         if r.get("pdb_url"):
             lines.append(f"- [View 3D Structure]({r['pdb_url']})")
         lines.append("")
+    return "\n".join(lines)
+
+
+def format_federated(fed_results: Dict) -> str:
+    """Format federated learning results."""
+    lines = ["## 🏥 Federated Learning Results\n"]
+    lines.append(f"**Hospitals**: {fed_results['num_hospitals']} | "
+                 f"**Rounds**: {fed_results['num_rounds']} | "
+                 f"**Privacy ε**: {fed_results['privacy_epsilon']}\n")
+
+    lines.append("### Participating Hospitals\n")
+    lines.append("| ID | Hospital | Location | Specialization | Patients |")
+    lines.append("|-----|----------|----------|----------------|----------|")
+    for h in fed_results["hospital_summary"]:
+        lines.append(f"| {h['id']} | {h['name']} | {h['location']} | "
+                     f"{h['specialization']} | {h['patients']:,} |")
+
+    gm = fed_results["global_model"]
+    lines.append(f"\n### Convergence\n")
+    lines.append(f"- Final loss: **{gm['final_avg_loss']:.4f}**")
+    lines.append(f"- Privacy budget remaining: **{fed_results['privacy_budget_remaining']:.2f}** / 10.0")
+
+    lines.append("\n### Consensus Biomarkers\n")
+    if fed_results["consensus_biomarkers"]:
+        lines.append("| Biomarker | Type | Prevalence | Confidence | Hospitals |")
+        lines.append("|-----------|------|------------|------------|-----------|")
+        for b in fed_results["consensus_biomarkers"]:
+            lines.append(f"| {b['name']} | {b['type']} | {b['avg_prevalence']:.1%} | "
+                         f"{b['avg_confidence']:.1%} | {b['reporting_hospitals']} |")
+    else:
+        lines.append("*No consensus biomarkers found.*")
+
+    strat = fed_results["global_stratification"]
+    lines.append(f"\n### Patient Stratification\n")
+    lines.append(f"- Total patients: **{strat['total_patients']:,}**")
+    lines.append(f"- Responder rate: **{strat['responder_rate']:.1%}**")
+    lines.append(f"- Non-responder rate: **{strat['non_responder_rate']:.1%}**")
+
+    lines.append("\n---")
+    lines.append("*🔒 All data processed locally. Only weight updates were shared.*")
     return "\n".join(lines)
 
 
@@ -271,6 +324,11 @@ with gr.Blocks(
                 variant="primary",
                 size="lg",
             )
+            federated_checkbox = gr.Checkbox(
+                label="🏥 Enable Federated Learning",
+                value=False,
+                info="Run privacy-preserving multi-hospital training before pipeline",
+            )
 
         with gr.Column(scale=2):
             pipeline_log = gr.Textbox(
@@ -290,13 +348,16 @@ with gr.Blocks(
         with gr.TabItem("🧬 Structures"):
             structures_output = gr.Markdown(label="AlphaFold Structures")
 
+        with gr.TabItem("🏥 Federated"):
+            federated_output = gr.Markdown(label="Federated Learning")
+
         with gr.TabItem("📊 Full Report"):
             report_output = gr.Markdown(label="Cross-Stage Intelligence Report")
 
     run_btn.click(
         fn=run_full_pipeline,
-        inputs=[disease_input, target_input],
-        outputs=[pipeline_log, rankings_output, safety_output, structures_output, report_output],
+        inputs=[disease_input, target_input, federated_checkbox],
+        outputs=[pipeline_log, rankings_output, safety_output, structures_output, report_output, federated_output],
     )
 
     gr.Markdown("""

@@ -1,6 +1,6 @@
 # HAI-DEF Drug Discovery Pipeline
 
-> **End-to-end drug discovery pipeline using 10 AI models (HAI-DEF + DeepChem + AlphaFold) with Cross-Stage Intelligence and Gradio demo.**
+> **End-to-end drug discovery pipeline using 10 AI models (HAI-DEF + DeepChem + AlphaFold) with Cross-Stage Intelligence, Federated Learning, and Gradio demo.**
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
@@ -77,6 +77,12 @@ huggingface-cli login
 # Full pipeline demo
 python -m pipeline.main
 
+# With federated learning (multi-hospital)
+python -m pipeline.main --federated
+
+# Custom disease/target with federated learning
+python -m pipeline.main --disease "CML" --target "BCR-ABL" --federated
+
 # Individual stages
 python -m pipeline.target_identification
 python -m pipeline.lead_discovery
@@ -111,7 +117,11 @@ hai-def-drug-discovery/
 │   ├── cxr_analysis.py            # Stage 9: CXR Foundation chest X-ray
 │   ├── deepchem_analysis.py       # Stage 10: DeepChem GNN properties
 │   ├── alphafold_analysis.py      # Stage 11: AlphaFold structure
+│   ├── federated_learning.py      # Stage 0: Federated multi-hospital learning
+│   ├── cross_stage_intelligence.py # Cross-stage MCDA ranking
+│   ├── evaluation.py              # Pipeline evaluation & benchmarks
 │   └── visualization.py           # Charts, molecular visualization
+├── app.py                         # Gradio interactive demo
 ├── data/
 │   └── sample_compounds.csv       # Example drug candidates (SMILES)
 ├── notebooks/
@@ -154,6 +164,23 @@ Disease: Non-Small Cell Lung Cancer (NSCLC)
 | CXR Foundation | `google/cxr-foundation` | EfficientNet-L2 | Chest X-ray ELIXR embeddings |
 | DeepChem | `deepchem/graphconv` | GCN | Molecular property prediction |
 | AlphaFold | AlphaFold DB API | AlphaFold 2/3 | Protein structure prediction |
+
+## Federated Learning
+
+The pipeline includes a **federated learning module** that simulates privacy-preserving collaborative drug discovery across multiple hospitals:
+
+- **5 simulated hospital nodes** with diverse specializations (oncology, cardiology, pulmonology, rare diseases, infectious disease)
+- **FedAvg aggregation** across 10 rounds with differential privacy (ε=1.0)
+- **Consensus biomarker discovery** — identifies biomarkers reported by ≥2 independent hospitals
+- **Patient stratification** — global responder/non-responder rates without sharing patient data
+- **Privacy guarantee** — only model weight updates are shared; raw patient data never leaves hospital nodes
+
+```bash
+# Run with federated learning
+python -m pipeline.main --federated
+```
+
+In the Gradio demo, check **"🏥 Enable Federated Learning"** to include the federated stage.
 
 ## Disclaimer
 

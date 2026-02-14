@@ -14,3 +14,4 @@ Pillow>=10.0.0       # Image processing for pathology patches
 deepchem>=2.7.0      # Graph neural network molecular properties
 requests>=2.31.0     # AlphaFold DB API access
 gradio>=4.0.0        # Interactive web demo
+scipy>=1.10.0        # Federated learning convergence statistics

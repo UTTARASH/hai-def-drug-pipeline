@@ -161,3 +161,13 @@ SAMPLE_COMPOUNDS_FILE = "data/sample_compounds.csv"
 OUTPUT_DIR = "output"
 MAX_NEW_TOKENS = 256
 TEMPERATURE = 0.1  # Low temperature for deterministic predictions
+
+# ═══════════════════════════════════════════════════════════
+# Federated Learning Configuration
+# ═══════════════════════════════════════════════════════════
+
+FEDERATED_NUM_HOSPITALS = 5       # Number of participating hospital nodes
+FEDERATED_ROUNDS = 10             # Number of aggregation rounds
+FEDERATED_LEARNING_RATE = 0.01    # Local SGD learning rate (simulated)
+FEDERATED_PRIVACY_EPSILON = 1.0   # Differential privacy budget (ε)
+FEDERATED_WEIGHT_DIM = 384        # MedSigLIP embedding dimension
