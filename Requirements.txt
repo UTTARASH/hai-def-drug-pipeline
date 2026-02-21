@@ -1,0 +1,16 @@
+# Core ML
+torch>=2.0.0
+transformers>=4.38.0
+accelerate>=0.25.0
+bitsandbytes>=0.41.0
+
+# Scientific
+numpy>=1.24.0,<1.26.0
+pandas>=2.0.0
+scipy>=1.10.0
+
+# Chemistry (optional)
+rdkit>=2023.9.0
+
+# Utilities
+tqdm>=4.65.0
