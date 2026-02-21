@@ -1,0 +1,13 @@
+medgemma-cataract-discovery/
+├── README.md
+├── requirements.txt
+├── .gitignore
+├── src/
+│   ├── __init__.py (empty file)
+│   ├── models/
+│   │   ├── __init__.py (empty)
+│   │   └── medgemma_loader.py (placeholder - see below)
+│   └── training/
+│       ├── __init__.py (empty)
+│       ├── lora_finetuner.py (placeholder)
+│       └── federated_learning.py (placeholder)
